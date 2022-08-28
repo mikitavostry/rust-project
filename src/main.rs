@@ -1,18 +1,16 @@
 use rand::Rng;
 
-use yew::prelude::*;
-
 #[macro_use]
 extern crate rocket;
 
 fn randomFromRange(from: i64, to: i64) -> i64 {
     let mut rng = rand::thread_rng();
-    let failProbability: i64 = rng.gen_range(from..to);
-    return failProbability;
+    let randInt: i64 = rng.gen_range(from..to);
+    return randInt;
 }
 
 #[get("/calculateDisselUsageForDistance?<distance>&<yearOfProduction>&<fuelUsagePer100KM>")]
-fn calculateDiselusage(distance: u32, yearOfProduction: u32, fuelUsagePer100KM: u32) -> String {
+fn calculateDiselUsage(distance: u32, yearOfProduction: u32, fuelUsagePer100KM: u32) -> String {
     let fuelUsage: f32 = (distance * fuelUsagePer100KM) as f32 / 100.0;
     format!("Fuel consumption is {}.", fuelUsage)
 }
@@ -28,6 +26,6 @@ fn findProbability(VIN: String) -> String {
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![calculateDiselusage])
-        .mount("/", routes![findProbability])
+        .mount("/api", routes![calculateDiselUsage])
+        .mount("/api", routes![findProbability])
 }
